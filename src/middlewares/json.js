@@ -1,13 +1,14 @@
 export async function json(req, res) {
-  const buffers = []
-
-  for await (const chunk of req) {
-    buffers.push(chunk)
-  }
+  const parsedBuffers = []
 
   try {
-    req.body = JSON.parse(Buffer.concat(buffers).toString())
-  } catch {
+    for await (const chunk of req) {
+      parsedBuffers.push(JSON.parse(chunk))
+    }
+
+    req.body = parsedBuffers
+  } catch (error) {
+    console.error('JSON Parse Error:', error)
     req.body = null
   }
 
