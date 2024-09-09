@@ -45,21 +45,40 @@ export class Database {
     return data
   }
 
-  update(table, id, data) {
+  update(table, id, newData) {
+    let taskNotFound = false
+
     const rowIndex = this.#database[table].findIndex((row) => row.id === id)
 
     if (rowIndex > -1) {
-      this.#database[table][rowIndex] = { id, ...data }
+      const oldData = this.#database[table][rowIndex]
+
+      this.#database[table][rowIndex] = {
+        ...oldData,
+        ...newData,
+      }
+
       this.#persist()
+    } else {
+      taskNotFound = true
+
+      return taskNotFound
     }
   }
 
   delete(table, id) {
+    let taskNotFound = false
+
     const rowIndex = this.#database[table].findIndex((row) => row.id === id)
 
     if (rowIndex > -1) {
       this.#database[table].splice(rowIndex, 1)
+
       this.#persist()
+    } else {
+      taskNotFound = true
+
+      return taskNotFound
     }
   }
 }

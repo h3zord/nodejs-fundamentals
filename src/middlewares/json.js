@@ -8,7 +8,7 @@ export async function json(req, res) {
 
     req.body = parsedBuffers
   } catch (error) {
-    console.error('JSON Parse Error:', error)
+    console.error('JSON Parse:', error)
     req.body = null
   }
 
